@@ -1,0 +1,6 @@
+{
+  "name": "Atlas Farm Taroudant",
+  "description": "Authentic Moroccan agricultural farm in Taroudant, Souss-Massa specializing in fresh cow milk, traditional dairy products, cattle and livestock sales, sheep, goats, and local farm produce.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
