@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
-import { MessageCircle, Search, SlidersHorizontal, Check } from 'lucide-react';
+import {
+  ArrowDownAZ,
+  ArrowUpAZ,
+  ArrowUpDown,
+  Check,
+  MessageCircle,
+  RotateCcw,
+  Search,
+  SlidersHorizontal,
+} from 'lucide-react';
 import { UI_COPY } from '../data/farmData';
 import {
   buildWhatsAppInquiryUrl,
-  filterProducts,
+  filterAndSortProducts,
   type AvailabilityKey,
   type Language,
   type ProductCategory,
   type ProductItem,
+  type SortOption,
 } from '../utils/farmLogic';
 import { ResilientImage } from './ResilientImage';
 
@@ -16,7 +26,11 @@ interface ProductCatalogProps {
   products: ProductItem[];
   onUpdateProduct: (
     productId: string,
-    updates: { priceText?: string; availability?: AvailabilityKey }
+    updates: {
+      priceText?: string;
+      availability?: AvailabilityKey;
+      referencePriceMad?: number;
+    }
   ) => void;
   whatsappNumber: string;
   onUpdateWhatsappNumber: (newPhone: string) => void;
@@ -30,15 +44,17 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   onUpdateWhatsappNumber,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
+  const [sortBy, setSortBy] = useState<SortOption>('featured');
   const [searchQuery, setSearchQuery] = useState('');
   const [editMode, setEditMode] = useState(false);
 
   const copy = UI_COPY[language].products;
 
-  const filteredProducts = filterProducts(
+  const displayedProducts = filterAndSortProducts(
     products,
     selectedCategory,
     searchQuery,
+    sortBy,
     language
   );
 
@@ -49,10 +65,27 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     { key: 'farm_goods', label: copy.categories.farm_goods },
   ];
 
+  const sortOptions: Array<{ key: SortOption; label: string }> = [
+    { key: 'featured', label: copy.sortLabels.featured },
+    { key: 'name_asc', label: copy.sortLabels.name_asc },
+    { key: 'name_desc', label: copy.sortLabels.name_desc },
+    { key: 'price_asc', label: copy.sortLabels.price_asc },
+    { key: 'price_desc', label: copy.sortLabels.price_desc },
+  ];
+
   const getCategoryTextLabel = (cat: ProductCategory): string => {
     if (cat === 'dairy') return copy.categories.dairy;
     if (cat === 'livestock') return copy.categories.livestock;
     return copy.categories.farm_goods;
+  };
+
+  const hasActiveFilterOrSort =
+    selectedCategory !== 'all' || sortBy !== 'featured' || searchQuery.trim() !== '';
+
+  const handleResetAll = () => {
+    setSelectedCategory('all');
+    setSortBy('featured');
+    setSearchQuery('');
   };
 
   return (
@@ -123,65 +156,160 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           )}
         </div>
 
-        {/* Interactive Filter Tabs + Search Input */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10">
-          {/* Interactive Segmented Category Filter Buttons */}
-          <div
-            role="tablist"
-            aria-label="Product Categories"
-            className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#EFEAE0] rounded-xl border border-[#1C251E]/10"
-          >
-            {categoryButtons.map((tab) => {
-              const active = selectedCategory === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setSelectedCategory(tab.key)}
-                  className={`px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[38px] ${
-                    active
-                      ? 'bg-[#1A3A2A] text-[#FAF7F2] shadow-xs'
-                      : 'text-[#3A473D] hover:text-[#1A3A2A]'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
+        {/* Clearly Visible Filtering & Sorting Control Panel */}
+        <div className="mb-10 p-4 sm:p-5 rounded-2xl bg-[#F2ECE1] border border-[#1C251E]/12 space-y-4">
+          {/* Row 1: Category Filter Buttons + Search Box */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="space-y-1.5">
+              <span className="block text-xs font-semibold text-[#5C4033]">
+                {copy.sortLabels.filterByCategoryLabel}
+              </span>
+              <div
+                role="tablist"
+                aria-label="Product Categories"
+                className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#FAF7F2] rounded-xl border border-[#1C251E]/10"
+              >
+                {categoryButtons.map((tab) => {
+                  const active = selectedCategory === tab.key;
+                  return (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      role="tab"
+                      data-filter-category={tab.key}
+                      aria-selected={active}
+                      onClick={() => setSelectedCategory(tab.key)}
+                      className={`px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[38px] ${
+                        active
+                          ? 'bg-[#1A3A2A] text-[#FAF7F2] shadow-xs'
+                          : 'text-[#3A473D] hover:text-[#1A3A2A]'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Search Input */}
+            <div className="w-full lg:w-80 space-y-1.5">
+              <label
+                htmlFor="product-search-input"
+                className="block text-xs font-semibold text-[#5C4033]"
+              >
+                {copy.searchPlaceholder}
+              </label>
+              <div className="relative">
+                <Search
+                  className="w-4 h-4 text-[#5C4033] absolute top-1/2 -translate-y-1/2 start-3.5 pointer-events-none"
+                  aria-hidden="true"
+                />
+                <input
+                  id="product-search-input"
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={copy.searchPlaceholder}
+                  className="w-full ps-10 pe-4 py-2 text-sm bg-[#FAF7F2] border border-[#1C251E]/15 rounded-xl text-[#1C251E] placeholder:text-[#5A675D] focus:outline-none focus:border-[#1A3A2A] min-h-[38px]"
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Search Input */}
-          <div className="relative min-w-[260px] sm:w-96">
-            <label htmlFor="product-search-input" className="sr-only">
-              {copy.searchPlaceholder}
-            </label>
-            <Search
-              className="w-4 h-4 text-[#5C4033] absolute top-1/2 -translate-y-1/2 start-3.5 pointer-events-none"
-              aria-hidden="true"
-            />
-            <input
-              id="product-search-input"
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={copy.searchPlaceholder}
-              className="w-full ps-10 pe-4 py-2.5 text-sm bg-[#FAF7F2] border border-[#1C251E]/15 rounded-xl text-[#1C251E] placeholder:text-[#5A675D] focus:outline-none focus:border-[#1A3A2A]"
-            />
+          {/* Row 2: Sort By Controls (Quick Sort Pills + Select Dropdown + Count & Reset) */}
+          <div className="pt-3 border-t border-[#1C251E]/10 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <label
+                htmlFor="product-sort-select"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1A3A2A] whitespace-nowrap shrink-0"
+              >
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#5C4033]" aria-hidden="true" />
+                <span>{copy.sortLabels.sortByLabel}</span>
+              </label>
+
+              {/* Accessible Sort Dropdown */}
+              <select
+                id="product-sort-select"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="px-3.5 py-2 text-xs sm:text-sm font-semibold bg-[#FAF7F2] border border-[#1C251E]/15 rounded-xl text-[#1A3A2A] focus:outline-none focus:border-[#1A3A2A] cursor-pointer min-h-[38px]"
+              >
+                {sortOptions.map((opt) => (
+                  <option key={opt.key} value={opt.key}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+
+              {/* Direct Quick-Sort Buttons for 1-Click Sorting */}
+              <div
+                role="group"
+                aria-label={copy.sortLabels.sortByLabel}
+                className="flex flex-wrap items-center gap-1.5"
+              >
+                {sortOptions
+                  .filter((opt) => opt.key !== 'featured')
+                  .map((opt) => {
+                    const isSelected = sortBy === opt.key;
+                    return (
+                      <button
+                        key={opt.key}
+                        type="button"
+                        data-sort-option={opt.key}
+                        aria-pressed={isSelected}
+                        onClick={() =>
+                          setSortBy((prev) => (prev === opt.key ? 'featured' : opt.key))
+                        }
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[34px] ${
+                          isSelected
+                            ? 'bg-[#1A3A2A] text-[#FAF7F2] border-[#1A3A2A]'
+                            : 'bg-[#FAF7F2] text-[#3A473D] border-[#1C251E]/12 hover:text-[#1A3A2A] hover:border-[#1A3A2A]/30'
+                        }`}
+                      >
+                        {opt.key === 'name_asc' && (
+                          <ArrowDownAZ className="w-3.5 h-3.5" aria-hidden="true" />
+                        )}
+                        {opt.key === 'name_desc' && (
+                          <ArrowUpAZ className="w-3.5 h-3.5" aria-hidden="true" />
+                        )}
+                        <span>{opt.label}</span>
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+
+            {/* Results Counter & Reset Button */}
+            <div className="flex items-center justify-between sm:justify-end gap-3 text-xs text-[#5C4033]">
+              <span className="font-mono-tabular font-semibold text-[#1A3A2A]">
+                {displayedProducts.length} / {products.length}{' '}
+                <span className="font-sans font-normal text-[#5C4033]">
+                  {copy.sortLabels.showingCount}
+                </span>
+              </span>
+
+              {hasActiveFilterOrSort && (
+                <button
+                  type="button"
+                  onClick={handleResetAll}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#1A3A2A] bg-[#FAF7F2] hover:bg-[#E6DFD1] border border-[#1C251E]/15 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                >
+                  <RotateCcw className="w-3 h-3" aria-hidden="true" />
+                  <span>{copy.resetFilterBtn}</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
         {/* 3-Column Product Grid */}
-        {filteredProducts.length === 0 ? (
+        {displayedProducts.length === 0 ? (
           <div className="py-16 text-center rounded-2xl bg-[#F2ECE1]/60 border border-[#1C251E]/10 space-y-4">
             <p className="text-base font-medium text-[#3A473D]">{copy.emptyState}</p>
             <button
               type="button"
-              onClick={() => {
-                setSelectedCategory('all');
-                setSearchQuery('');
-              }}
+              onClick={handleResetAll}
               className="px-4 py-2 text-xs font-semibold text-[#FAF7F2] bg-[#1A3A2A] rounded-lg cursor-pointer"
             >
               {copy.resetFilterBtn}
@@ -189,7 +317,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-            {filteredProducts.map((product) => {
+            {displayedProducts.map((product) => {
               const inquiryHref = buildWhatsAppInquiryUrl({
                 phone: whatsappNumber,
                 productName: product.whatsappTopic[language],
@@ -199,6 +327,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               return (
                 <article
                   key={product.id}
+                  data-product-id={product.id}
+                  data-product-price={product.referencePriceMad}
                   className="group flex flex-col rounded-2xl bg-[#FAF7F2] border border-[#1C251E]/12 overflow-hidden transition-transform duration-150 hover:-translate-y-0.5"
                 >
                   {/* Lead with Imagery: 4:3 High-Quality Farm Photograph */}
@@ -234,6 +364,26 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     <div className="pt-4 border-t border-[#1C251E]/10 space-y-4">
                       {editMode ? (
                         <div className="space-y-2.5 bg-[#F2ECE1] p-3 rounded-xl">
+                          <div>
+                            <label
+                              htmlFor={`ref-price-${product.id}`}
+                              className="block text-xs font-semibold text-[#1A3A2A] mb-1"
+                            >
+                              {copy.sortLabels.referencePriceEditLabel}
+                            </label>
+                            <input
+                              id={`ref-price-${product.id}`}
+                              type="number"
+                              min={0}
+                              value={product.referencePriceMad}
+                              onChange={(e) =>
+                                onUpdateProduct(product.id, {
+                                  referencePriceMad: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="font-mono-tabular w-full px-2.5 py-1.5 text-xs bg-[#FAF7F2] border border-[#1C251E]/20 rounded-lg text-[#1C251E]"
+                            />
+                          </div>
                           <div>
                             <label
                               htmlFor={`price-${product.id}`}

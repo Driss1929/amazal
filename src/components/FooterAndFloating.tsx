@@ -23,17 +23,20 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
   });
 
   return (
-    <div className="fixed bottom-5 end-5 z-30">
+    <div
+      id="floating-whatsapp-widget"
+      className="fixed bottom-5 end-5 z-30"
+    >
       <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={copy.tooltip}
         title={copy.tooltip}
-        className="inline-flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#1A3A2A] hover:bg-[#254F3A] text-[#FAF7F2] shadow-lg border border-[#FAF7F2]/15 transition-transform duration-150 hover:-translate-y-0.5 whitespace-nowrap shrink-0 min-h-[44px]"
+        className="inline-flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#1A3A2A] hover:bg-[#254F3A] text-[#FAF7F2] shadow-lg border border-[#FAF7F2]/20 transition-transform duration-150 hover:-translate-y-0.5 whitespace-nowrap shrink-0 min-h-[46px]"
       >
         <MessageCircle className="w-5 h-5 text-[#FAF7F2] shrink-0" aria-hidden="true" />
-        <span className="text-xs font-semibold tracking-wide hidden sm:inline">
+        <span className="text-xs font-semibold tracking-wide">
           {copy.label}
         </span>
       </a>

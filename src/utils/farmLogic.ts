@@ -4,6 +4,13 @@ export type ProductCategory = 'dairy' | 'livestock' | 'farm_goods';
 
 export type AvailabilityKey = 'available_daily' | 'seasonal_or_inquire' | 'upon_inquiry';
 
+export type SortOption =
+  | 'featured'
+  | 'name_asc'
+  | 'name_desc'
+  | 'price_asc'
+  | 'price_desc';
+
 export interface LocalizedText {
   en: string;
   fr: string;
@@ -18,6 +25,7 @@ export interface ProductItem {
   unitOrBreedNote: LocalizedText;
   availability: AvailabilityKey;
   priceDisplay: LocalizedText;
+  referencePriceMad: number;
   whatsappTopic: LocalizedText;
   imagePath: string;
   imageObjectPosition?: string;
@@ -112,11 +120,11 @@ export function buildWhatsAppInquiryUrl(params: {
       }
     } else {
       if (params.language === 'fr') {
-        text = `Bonjour Atlas Farm Taroudant, je souhaite me renseigner sur vos produits laitiers frais, votre bétail et vos produits agricoles à Taroudant.`;
+        text = `Bonjour, je suis intéressé(e) par les produits d'Atlas Farm Taroudant. Pouvez-vous m'aider ?`;
       } else if (params.language === 'ar') {
-        text = `السلام عليكم ضيعة أطلس تارودانت، أود الاستفسار عن الحليب الطري والماشية ومنتجات الضيعة المتوفرة لديكم في تارودانت.`;
+        text = `السلام عليكم، أنا مهتم بمنتجات ضيعة أطلس تارودانت. هل يمكنكم مساعدتي؟`;
       } else {
-        text = `Hello Atlas Farm Taroudant, I would like to inquire about your fresh milk, livestock, and farm products in Taroudant.`;
+        text = `Hello, I'm interested in Atlas Farm Taroudant products. Can you help me?`;
       }
     }
   }
@@ -213,9 +221,171 @@ export function filterProducts(
 }
 
 /**
+ * Sorts products by name (A-Z, Z-A), reference price (low-to-high, high-to-low), or featured order.
+ */
+export function sortProducts(
+  products: ProductItem[],
+  sortBy: SortOption,
+  language: Language
+): ProductItem[] {
+  const copy = [...products];
+  if (sortBy === 'featured') {
+    return copy;
+  }
+  if (sortBy === 'name_asc') {
+    return copy.sort((a, b) =>
+      a.name[language].localeCompare(b.name[language], language, {
+        sensitivity: 'base',
+      })
+    );
+  }
+  if (sortBy === 'name_desc') {
+    return copy.sort((a, b) =>
+      b.name[language].localeCompare(a.name[language], language, {
+        sensitivity: 'base',
+      })
+    );
+  }
+  if (sortBy === 'price_asc') {
+    return copy.sort((a, b) => a.referencePriceMad - b.referencePriceMad);
+  }
+  if (sortBy === 'price_desc') {
+    return copy.sort((a, b) => b.referencePriceMad - a.referencePriceMad);
+  }
+  return copy;
+}
+
+/**
+ *Filters and sorts products in a single pure pipeline.
+ */
+export function filterAndSortProducts(
+  products: ProductItem[],
+  category: ProductCategory | 'all',
+  searchQuery: string,
+  sortBy: SortOption,
+  language: Language
+): ProductItem[] {
+  const filtered = filterProducts(products, category, searchQuery, language);
+  return sortProducts(filtered, sortBy, language);
+}
+
+/**
+ * Module 2 Dairy critical calculation:
+ * Milk Balance = Opening Stock + Production - Sales - Processing - Losses
+ */
+export function calculateMilkBalance(params: {
+  openingStockLiters: number;
+  producedLiters: number;
+  soldLiters: number;
+  processedLiters: number;
+  lossLiters: number;
+}): number {
+  const raw =
+    params.openingStockLiters +
+    params.producedLiters -
+    params.soldLiters -
+    params.processedLiters -
+    params.lossLiters;
+  return Math.round(raw * 100) / 100;
+}
+
+/**
  * Builds a clean Google Maps iframe embed URL for Taroudant or custom coordinates/address.
  */
 export function buildGoogleMapsEmbedUrl(locationQuery: string, language: Language): string {
   const cleanQuery = locationQuery.trim() || 'Taroudant, Souss-Massa, Morocco';
   return `https://www.google.com/maps?q=${encodeURIComponent(cleanQuery)}&hl=${language}&z=12&output=embed`;
 }
+
+export type TestimonialCategory = 'dairy' | 'livestock' | 'farm_goods';
+
+export interface TestimonialItem {
+  id: string;
+  category: TestimonialCategory;
+  clientName: LocalizedText;
+  clientRole: LocalizedText;
+  clientLocation: LocalizedText;
+  productPurchased: LocalizedText;
+  quote: LocalizedText;
+  rating: number;
+  dateLabel: LocalizedText;
+  isSample?: boolean;
+}
+
+export interface NewTestimonialInput {
+  clientName: string;
+  clientLocation: string;
+  category: TestimonialCategory;
+  productPurchased: string;
+  quote: string;
+  rating: number;
+}
+
+export interface TestimonialValidationErrors {
+  clientName?: string;
+  clientLocation?: string;
+  productPurchased?: string;
+  quote?: string;
+}
+
+/**
+ * Filters testimonials by category ('all' | 'dairy' | 'livestock' | 'farm_goods').
+ */
+export function filterTestimonials(
+  testimonials: TestimonialItem[],
+  category: TestimonialCategory | 'all'
+): TestimonialItem[] {
+  if (category === 'all') {
+    return [...testimonials];
+  }
+  return testimonials.filter((item) => item.category === category);
+}
+
+/**
+ * Validates a new customer review submission in the active language.
+ */
+export function validateTestimonialInput(
+  input: NewTestimonialInput,
+  language: Language
+): { valid: boolean; errors: TestimonialValidationErrors } {
+  const errors: TestimonialValidationErrors = {};
+  const msg = {
+    en: {
+      clientName: 'Please enter your name (at least 2 characters).',
+      clientLocation: 'Please enter your city or town in Morocco (e.g., Taroudant).',
+      productPurchased: 'Please specify the farm product or livestock purchased.',
+      quote: 'Please share a review of at least 12 characters.',
+    },
+    fr: {
+      clientName: 'Veuillez saisir votre nom (au moins 2 caractères).',
+      clientLocation: 'Veuillez indiquer votre ville ou localité (ex. Taroudant).',
+      productPurchased: 'Veuillez préciser le produit ou le bétail acheté.',
+      quote: 'Veuillez partager un avis d’au moins 12 caractères.',
+    },
+    ar: {
+      clientName: 'يرجى إدخال الاسم الكامل (حرفان على الأقل).',
+      clientLocation: 'يرجى تحديد المدينة أو المنطقة (مثال: تارودانت).',
+      productPurchased: 'يرجى تحديد المنتج أو الماشية التي تم اقتناؤها.',
+      quote: 'يرجى كتابة تقييم لا يقل عن 12 حرفاً.',
+    },
+  }[language];
+
+  if (!input.clientName || input.clientName.trim().length < 2) {
+    errors.clientName = msg.clientName;
+  }
+  if (!input.clientLocation || input.clientLocation.trim().length < 2) {
+    errors.clientLocation = msg.clientLocation;
+  }
+  if (!input.productPurchased || input.productPurchased.trim().length < 2) {
+    errors.productPurchased = msg.productPurchased;
+  }
+  if (!input.quote || input.quote.trim().length < 12) {
+    errors.quote = msg.quote;
+  }
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors,
+  };
+}
+

@@ -3,6 +3,7 @@ import type {
   GalleryItem,
   Language,
   ProductItem,
+  TestimonialItem,
 } from '../utils/farmLogic';
 import heroLandscapeImg from '../assets/images/hero_taroudant_farm_1794590182955.jpg';
 import freshDairyImg from '../assets/images/product_fresh_dairy_milk_1794590184217.jpg';
@@ -53,10 +54,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'منتجات الحليب · حلب يومي · مباشر من الضيعة',
     },
     availability: 'available_daily',
+    referencePriceMad: 8,
     priceDisplay: {
-      en: 'Contact us for pricing (Sample / Editable)',
-      fr: 'Contactez-nous pour les tarifs (Exemple modifiable)',
-      ar: 'اتصل بنا لمعرفة الأسعار (محتوى قابل للتعديل)',
+      en: '8 MAD / L (Sample · Contact us to confirm)',
+      fr: '8 MAD / L (Exemple · Contactez-nous pour confirmer)',
+      ar: '8 درهم / لتر (نموذجي · اتصل بنا للتأكيد)',
     },
     whatsappTopic: {
       en: 'fresh milk',
@@ -86,10 +88,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'مشتقات الحليب · تحضير تقليدي · حسب التوفر اليومي',
     },
     availability: 'seasonal_or_inquire',
+    referencePriceMad: 35,
     priceDisplay: {
-      en: 'Contact us for pricing & today’s availability',
-      fr: 'Contactez-nous pour les tarifs et la disponibilité du jour',
-      ar: 'اتصل بنا لمعرفة الأسعار والتوفر اليومي',
+      en: 'From 35 MAD (Sample · Contact for today’s batch)',
+      fr: 'Dès 35 MAD (Exemple · Contactez-nous pour le lot du jour)',
+      ar: 'ابتداءً من 35 درهم (نموذجي · اتصل لمعرفة المتوفر اليوم)',
     },
     whatsappTopic: {
       en: 'traditional dairy products (butter, lben, or cheese)',
@@ -121,10 +124,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'الماشية والأبقار · المعاينة متاحة بعين المكان',
     },
     availability: 'upon_inquiry',
+    referencePriceMad: 22000,
     priceDisplay: {
-      en: 'Contact us for pricing & current herd selection',
-      fr: 'Contactez-nous pour les tarifs et la sélection actuelle',
-      ar: 'اتصل بنا لمعرفة الأسعار والرؤوس المتوفرة حالياً',
+      en: 'From 22,000 MAD (Sample · Contact for current herd)',
+      fr: 'Dès 22 000 MAD (Exemple · Contactez-nous pour la sélection)',
+      ar: 'ابتداءً من 22,000 درهم (نموذجي · اتصل لمعرفة الرؤوس المتوفرة)',
     },
     whatsappTopic: {
       en: 'dairy cows',
@@ -154,10 +158,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'الماشية والأبقار · بيع فردي أو بالجملة',
     },
     availability: 'upon_inquiry',
+    referencePriceMad: 16500,
     priceDisplay: {
-      en: 'Contact us for pricing',
-      fr: 'Contactez-nous pour les tarifs',
-      ar: 'اتصل بنا لمعرفة الأسعار',
+      en: 'From 16,500 MAD (Sample · Contact us for pricing)',
+      fr: 'Dès 16 500 MAD (Exemple · Contactez-nous pour les tarifs)',
+      ar: 'ابتداءً من 16,500 درهم (نموذجي · اتصل بنا لمعرفة الأسعار)',
     },
     whatsappTopic: {
       en: 'beef cattle',
@@ -187,10 +192,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'الماشية والأبقار · مواليد الضيعة ورعاية متواصلة',
     },
     availability: 'upon_inquiry',
+    referencePriceMad: 8500,
     priceDisplay: {
-      en: 'Contact us for pricing & age groups',
-      fr: 'Contactez-nous pour les tarifs et tranches d’âge',
-      ar: 'اتصل بنا لمعرفة الأسعار والأعمار المتوفرة',
+      en: 'From 8,500 MAD (Sample · Contact for age groups)',
+      fr: 'Dès 8 500 MAD (Exemple · Contactez-nous selon l’âge)',
+      ar: 'ابتداءً من 8,500 درهم (نموذجي · اتصل لمعرفة الأعمار المتوفرة)',
     },
     whatsappTopic: {
       en: 'calves',
@@ -220,10 +226,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'الأغنام · رعي طبيعي · اختيار مباشر مع الفلاح',
     },
     availability: 'upon_inquiry',
+    referencePriceMad: 2800,
     priceDisplay: {
-      en: 'Contact us for pricing',
-      fr: 'Contactez-nous pour les tarifs',
-      ar: 'اتصل بنا لمعرفة الأسعار',
+      en: 'From 2,800 MAD (Sample · Contact us for pricing)',
+      fr: 'Dès 2 800 MAD (Exemple · Contactez-nous pour les tarifs)',
+      ar: 'ابتداءً من 2,800 درهم (نموذجي · اتصل بنا لمعرفة الأسعار)',
     },
     whatsappTopic: {
       en: 'sheep',
@@ -253,10 +260,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'الماعز · سلالات متأقلمة مع مناخ تارودانت',
     },
     availability: 'upon_inquiry',
+    referencePriceMad: 1800,
     priceDisplay: {
-      en: 'Contact us for pricing',
-      fr: 'Contactez-nous pour les tarifs',
-      ar: 'اتصل بنا لمعرفة الأسعار',
+      en: 'From 1,800 MAD (Sample · Contact us for pricing)',
+      fr: 'Dès 1 800 MAD (Exemple · Contactez-nous pour les tarifs)',
+      ar: 'ابتداءً من 1,800 درهم (نموذجي · اتصل بنا لمعرفة الأسعار)',
     },
     whatsappTopic: {
       en: 'goats',
@@ -288,10 +296,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'منتجات الضيعة · إنتاج طبيعي محدود حسب الموسم',
     },
     availability: 'seasonal_or_inquire',
+    referencePriceMad: 120,
     priceDisplay: {
-      en: 'Contact us for pricing & current stock',
-      fr: 'Contactez-nous pour les tarifs et le stock actuel',
-      ar: 'اتصل بنا لمعرفة الأسعار والكمية المتوفرة',
+      en: 'From 120 MAD (Sample · Contact for current stock)',
+      fr: 'Dès 120 MAD (Exemple · Contactez-nous pour le stock)',
+      ar: 'ابتداءً من 120 درهم (نموذجي · اتصل لمعرفة الكمية المتوفرة)',
     },
     whatsappTopic: {
       en: 'farm eggs and local honey',
@@ -321,10 +330,11 @@ export const INITIAL_PRODUCTS: ProductItem[] = [
       ar: 'منتجات فلاحية · مرتبطة بمواسم الجني والحصاد بتارودانت',
     },
     availability: 'seasonal_or_inquire',
+    referencePriceMad: 45,
     priceDisplay: {
-      en: 'Contact us for seasonal availability & pricing',
-      fr: 'Contactez-nous pour la disponibilité saisonnière',
-      ar: 'اتصل بنا لمعرفة المحاصيل المتوفرة حالياً وأسعارها',
+      en: 'From 45 MAD (Sample · Contact for seasonal harvest)',
+      fr: 'Dès 45 MAD (Exemple · Contactez-nous selon la saison)',
+      ar: 'ابتداءً من 45 درهم (نموذجي · اتصل لمعرفة المحاصيل المتوفرة)',
     },
     whatsappTopic: {
       en: 'seasonal agricultural products',
@@ -472,6 +482,153 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   },
 ];
 
+export const INITIAL_TESTIMONIALS: TestimonialItem[] = [
+  {
+    id: 'testimonial-taroudant-milk',
+    category: 'dairy',
+    clientName: {
+      en: 'Hajj Mohammed El Alaoui',
+      fr: 'Hajj Mohammed El Alaoui',
+      ar: 'الحاج محمد العلوي',
+    },
+    clientRole: {
+      en: 'Local Family Customer',
+      fr: 'Client Familial Local',
+      ar: 'زبون عائلي محلي',
+    },
+    clientLocation: {
+      en: 'Taroudant Medina',
+      fr: 'Médina de Taroudant',
+      ar: 'وسط مدينة تارودانت',
+    },
+    productPurchased: {
+      en: 'Fresh Cow Milk & Farm Butter',
+      fr: 'Lait de Vache Frais & Zebda Beldia',
+      ar: 'حليب البقر الطري والزبدة البلدية',
+    },
+    quote: {
+      en: 'Knowing our morning cow milk and traditional Lben come straight from a clean pasture farm here in Taroudant makes all the difference for our family table. You taste the natural green forage in every glass.',
+      fr: 'Savoir que notre lait du matin et notre Lben traditionnel proviennent directement d’une ferme propre ici à Taroudant change tout pour notre famille. On retrouve le goût authentique du terroir.',
+      ar: 'اقتناء حليب الصباح الطري واللبن البلدي مباشرة من ضيعة نظيفة ومعروفة هنا في تارودانت يمنح أسرتنا ثقة كبيرة. جودة الحليب وطراوته تعكسان التغذية الطبيعية للأبقار.',
+    },
+    rating: 5,
+    dateLabel: {
+      en: 'Sample Local Client Review · Taroudant',
+      fr: 'Exemple d’Avis Client Local · Taroudant',
+      ar: 'نموذج شهادة زبون محلي · تارودانت',
+    },
+    isSample: true,
+  },
+  {
+    id: 'testimonial-ouled-teima-breeder',
+    category: 'livestock',
+    clientName: {
+      en: 'Brahim Ait Oufkir',
+      fr: 'Brahim Aït Oufkir',
+      ar: 'إبراهيم أيت أوفقير',
+    },
+    clientRole: {
+      en: 'Smallholder Dairy Breeder',
+      fr: 'Éleveur Laitier Indépendant',
+      ar: 'فلاح ومربي أبقار حلوب',
+    },
+    clientLocation: {
+      en: 'Ouled Teima, Souss-Massa',
+      fr: 'Ouled Teïma, Souss-Massa',
+      ar: 'أولاد تايمة، سوس ماسة',
+    },
+    productPurchased: {
+      en: 'Dairy Cows & Young Calves',
+      fr: 'Vaches Laitières & Jeunes Veaux',
+      ar: 'أبقار حلوب وعجول صغيرة',
+    },
+    quote: {
+      en: 'When I visited Atlas Farm to select two heifers for my herd, the farmer showed me the paddocks, the green alfalfa feed, and the animals calmly without any pressure. Honest dealing and healthy stock.',
+      fr: 'Lors de ma visite à Atlas Farm pour choisir deux génisses, l’éleveur m’a montré les enclos, la luzerne fraîche et le troupeau en toute transparence. Une parole franche et du bétail en excellente santé.',
+      ar: 'عند زيارتي للضيعة لاختيار عجلات لتحسين القطيع، استقبلني صاحب الضيعة بكل ترحاب وأطلعني على الحظائر وجودة الأعلاف بكل شفافية. معاملة صادقة وماشية بصحة ممتازة.',
+    },
+    rating: 5,
+    dateLabel: {
+      en: 'Sample Local Breeder Review · Souss Valley',
+      fr: 'Exemple d’Avis Éleveur · Vallée du Souss',
+      ar: 'نموذج شهادة كسّاب · سهل سوس',
+    },
+    isSample: true,
+  },
+  {
+    id: 'testimonial-ait-iazza-sheep',
+    category: 'livestock',
+    clientName: {
+      en: 'Youssef Benali',
+      fr: 'Youssef Benali',
+      ar: 'يوسف بنعلي',
+    },
+    clientRole: {
+      en: 'Family Occasion Buyer',
+      fr: 'Client Particulier',
+      ar: 'زبون من المنطقة',
+    },
+    clientLocation: {
+      en: 'Ait Iazza, Taroudant Province',
+      fr: 'Aït Iazza, Province de Taroudant',
+      ar: 'أيت إعزة، إقليم تارودانت',
+    },
+    productPurchased: {
+      en: 'Pasture-Grazed Sheep',
+      fr: 'Moutons de Pâturage',
+      ar: 'الأغنام والخرفان',
+    },
+    quote: {
+      en: 'We reserved our sheep directly at the farm after messaging on WhatsApp. Being able to inspect the flock in person and speak directly with the farmer gives complete peace of mind.',
+      fr: 'Nous avons sélectionné nos moutons directement à la ferme après un premier contact sur WhatsApp. Pouvoir voir le troupeau sur place et discuter avec le propriétaire inspire une vraie confiance.',
+      ar: 'تواصلنا عبر واتساب ثم زرنا الضيعة لاختيار الخروف مباشرة من القطيع. المعاينة بعين المكان والتعامل المباشر مع الفلاح بدون وسطاء يضمنان راحة البال والجودة.',
+    },
+    rating: 5,
+    dateLabel: {
+      en: 'Sample Local Client Review · Ait Iazza',
+      fr: 'Exemple d’Avis Client · Aït Iazza',
+      ar: 'نموذج شهادة زبون · أيت إعزة',
+    },
+    isSample: true,
+  },
+  {
+    id: 'testimonial-taroudant-honey-eggs',
+    category: 'farm_goods',
+    clientName: {
+      en: 'Khadija Amrani',
+      fr: 'Khadija Amrani',
+      ar: 'خديجة العمراني',
+    },
+    clientRole: {
+      en: 'Local Guest House Host',
+      fr: 'Responsable de Maison d’Hôtes',
+      ar: 'مسؤولة رياض ودار ضيافة',
+    },
+    clientLocation: {
+      en: 'Taroudant Palms',
+      fr: 'Palmeraie de Taroudant',
+      ar: 'ضواحي تارودانت',
+    },
+    productPurchased: {
+      en: 'Country Eggs (Beldia), Honey & Seasonal Olives',
+      fr: 'Œufs Beldia, Miel Local & Olives de Saison',
+      ar: 'البيض البلدي والعسل الحر والزيتون',
+    },
+    quote: {
+      en: 'Our guests always ask where our breakfast country eggs, local honey, and fresh farm dairy come from. Having a reliable traditional farm right here in Taroudant is a treasure.',
+      fr: 'Nos hôtes demandent toujours d’où viennent les œufs beldia, le miel et le beurre fermier du petit-déjeuner. Avoir une ferme traditionnelle sérieuse à Taroudant est précieux.',
+      ar: 'يسألنا ضيوفنا دائماً عن مصدر البيض البلدي والعسل والزبدة البلدية في وجبة الفطور. التعامل مع ضيعة تقليدية قريبة منا في تارودانت يوفر لنا منتجات طبيعية أصيلة.',
+    },
+    rating: 5,
+    dateLabel: {
+      en: 'Sample Local Partner Review · Taroudant',
+      fr: 'Exemple d’Avis Partenaire · Taroudant',
+      ar: 'نموذج شهادة زبونة محلية · تارودانت',
+    },
+    isSample: true,
+  },
+];
+
 export const UI_COPY: Record<
   Language,
   {
@@ -501,6 +658,23 @@ export const UI_COPY: Record<
       body2: string;
       transparencyNotice: string;
       highlights: Array<{ number: string; title: string; description: string }>;
+      meetFarmer: {
+        kicker: string;
+        title: string;
+        farmerName: string;
+        farmerRole: string;
+        photoPlaceholderTitle: string;
+        photoPlaceholderSub: string;
+        uploadPhotoBtn: string;
+        resetPhotoBtn: string;
+        customUrlLabel: string;
+        bioParagraph1: string;
+        bioParagraph2: string;
+        bioParagraph3: string;
+        quote: string;
+        valuesList: Array<{ label: string; value: string }>;
+        directCtaLabel: string;
+      };
     };
     products: {
       kicker: string;
@@ -515,6 +689,17 @@ export const UI_COPY: Record<
         dairy: string;
         livestock: string;
         farm_goods: string;
+      };
+      sortLabels: {
+        filterByCategoryLabel: string;
+        sortByLabel: string;
+        featured: string;
+        name_asc: string;
+        name_desc: string;
+        price_asc: string;
+        price_desc: string;
+        showingCount: string;
+        referencePriceEditLabel: string;
       };
       availabilityLabels: {
         available_daily: string;
@@ -550,6 +735,37 @@ export const UI_COPY: Record<
       directBannerTitle: string;
       directBannerText: string;
       directBannerBtn: string;
+    };
+    testimonials: {
+      kicker: string;
+      title: string;
+      subtitle: string;
+      sampleDisclaimer: string;
+      filters: {
+        all: string;
+        dairy: string;
+        livestock: string;
+        farm_goods: string;
+      };
+      addReviewBtn: string;
+      cancelReviewBtn: string;
+      formTitle: string;
+      formSubtitle: string;
+      fields: {
+        clientName: string;
+        clientNamePlaceholder: string;
+        clientLocation: string;
+        clientLocationPlaceholder: string;
+        category: string;
+        productPurchased: string;
+        productPurchasedPlaceholder: string;
+        rating: string;
+        quote: string;
+        quotePlaceholder: string;
+        submitBtn: string;
+      };
+      verifiedClientBadge: string;
+      purchasedLabel: string;
     };
     contact: {
       kicker: string;
@@ -677,14 +893,40 @@ export const UI_COPY: Record<
             'Serving households, local markets, and breeders across Taroudant and the wider Souss-Massa region with straightforward personal service.',
         },
       ],
+      meetFarmer: {
+        kicker: 'Personal Stewardship · Meet the Farmer',
+        title: 'Meet the Farmer Behind Atlas Farm Taroudant',
+        farmerName: 'The Farm Steward & Founder',
+        farmerRole: 'Taroudant Agriculturalist & Livestock Breeder',
+        photoPlaceholderTitle: 'Farmer Portrait Placeholder',
+        photoPlaceholderSub:
+          'Friendly portrait photograph of the farmer in the pastures of Taroudant (Replace with your personal portrait photo anytime)',
+        uploadPhotoBtn: 'Set Farmer Portrait Photo',
+        resetPhotoBtn: 'Restore Default Portrait Placeholder',
+        customUrlLabel: 'Paste portrait image URL or upload file:',
+        bioParagraph1:
+          'Born from a deep lifelong bond with the fertile red earth and olive-lined pastures of the Taroudant valley, my work as a farmer is guided by a simple belief: healthy land and well-cared-for animals produce the most honest nourishment for our community.',
+        bioParagraph2:
+          'Every morning before sunrise, I walk the paddocks myself—checking the green alfalfa forage, overseeing the morning milking of our dairy cows, and tending to our calves, sheep, and goats. For me, agriculture is not an industrial assembly line; it is a living Moroccan heritage passed down through patience, respect for nature, and daily dedication.',
+        bioParagraph3:
+          'When you visit Atlas Farm Taroudant or reach out on WhatsApp, you speak directly with me. Whether you need fresh daily cow milk for your family or are selecting livestock for your farm or occasion, my personal commitment is to offer you complete transparency and quality I am proud to stand behind.',
+        quote:
+          '“Good farming begins with respect for the soil of Taroudant, gentle care for every animal in our herd, and honest word-of-mouth trust with every neighbor we serve.”',
+        valuesList: [
+          { label: 'Rooted in the Land', value: 'Souss-Massa & Taroudant Pastures' },
+          { label: 'Daily Dedication', value: 'Hands-On Herd & Milking Care' },
+          { label: 'Personal Guarantee', value: 'Direct On-Farm Selection & Honesty' },
+        ],
+        directCtaLabel: 'Speak Directly with the Farmer on WhatsApp',
+      },
     },
     products: {
       kicker: 'Our Products & Services',
       title: 'Farm Catalog & Livestock Availability',
       subtitle:
-        'Browse our three core farm categories below. Because livestock and harvest quantities change naturally throughout the year, pricing and current availability are confirmed directly with the farmer.',
+        'Browse our three core farm categories below. Filter by category or sort by name and indicative price to quickly find what you need, then message the farmer directly on WhatsApp.',
       sampleNotice:
-        'Editable Sample Catalog: Product prices and exact daily stock are shown as configurable placeholders ("Contact us for pricing") until updated by the farm owner.',
+        'Editable Sample Catalog: Indicative prices (in MAD) and daily stock are configurable by the farm owner. Contact us directly to confirm today’s exact pricing and availability.',
       editModeBtn: 'Customize Sample Prices & Phone',
       editModeActiveBtn: 'Done Customizing Catalog',
       searchPlaceholder: 'Search milk, cows, calves, sheep, goats, honey...',
@@ -694,15 +936,26 @@ export const UI_COPY: Record<
         livestock: 'Livestock & Cattle',
         farm_goods: 'Farm Products',
       },
+      sortLabels: {
+        filterByCategoryLabel: 'Filter by Category:',
+        sortByLabel: 'Sort Products By:',
+        featured: 'Featured Farm Order',
+        name_asc: 'Name (A–Z)',
+        name_desc: 'Name (Z–A)',
+        price_asc: 'Price (Low to High)',
+        price_desc: 'Price (High to Low)',
+        showingCount: 'products shown',
+        referencePriceEditLabel: 'Sortable Reference Price (MAD):',
+      },
       availabilityLabels: {
         available_daily: 'Daily Farm Milking · Inquire for Today’s Volume',
         seasonal_or_inquire: 'Seasonal / Limited Batch · Check Availability',
         upon_inquiry: 'Available by Direct Selection & Inquiry',
       },
       whatsappBtn: 'Inquire on WhatsApp',
-      priceLabel: 'Pricing',
-      emptyState: 'No products match your search criteria.',
-      resetFilterBtn: 'Show All Products',
+      priceLabel: 'Indicative Price',
+      emptyState: 'No products match your current category filter or search criteria.',
+      resetFilterBtn: 'Reset Filters & Sort',
     },
     gallery: {
       kicker: 'Farm Gallery',
@@ -762,6 +1015,41 @@ export const UI_COPY: Record<
       directBannerText:
         'Send us a quick message on WhatsApp or use the contact form below to schedule a farm visit in Taroudant.',
       directBannerBtn: 'Message the Farmer on WhatsApp',
+    },
+    testimonials: {
+      kicker: 'Local Client Voices · Taroudant & Souss-Massa',
+      title: 'What Local Families & Breeders Say About Atlas Farm',
+      subtitle:
+        'Word-of-mouth trust is the foundation of Moroccan agriculture. Read feedback from local households, livestock breeders, and partners across the Taroudant region—or share your own experience.',
+      sampleDisclaimer:
+        'Transparency Note: Initial cards below are editable sample reviews illustrating local B2C and B2B feedback. New reviews submitted via "Share Your Experience" are added directly to this page.',
+      filters: {
+        all: 'All Client Reviews',
+        dairy: 'Fresh Dairy & Milk',
+        livestock: 'Cattle & Livestock',
+        farm_goods: 'Eggs, Honey & Harvest',
+      },
+      addReviewBtn: 'Share Your Experience',
+      cancelReviewBtn: 'Close Review Form',
+      formTitle: 'Add Your Client Review',
+      formSubtitle:
+        'Have you purchased fresh milk, livestock, or seasonal farm products from Atlas Farm Taroudant? Share your feedback below.',
+      fields: {
+        clientName: 'Your Name',
+        clientNamePlaceholder: 'e.g., Omar El Fassi',
+        clientLocation: 'City / Area in Morocco',
+        clientLocationPlaceholder: 'e.g., Taroudant, Ouled Teima, Agadir',
+        category: 'Category Purchased',
+        productPurchased: 'Product or Livestock Purchased',
+        productPurchasedPlaceholder: 'e.g., Fresh Cow Milk, Dairy Cow, Sheep, Honey',
+        rating: 'Rating',
+        quote: 'Your Review',
+        quotePlaceholder:
+          'Share your experience with our farm products, livestock care, or direct service...',
+        submitBtn: 'Publish Client Review',
+      },
+      verifiedClientBadge: 'Client Submitted Review',
+      purchasedLabel: 'Product:',
     },
     contact: {
       kicker: 'Location & Contact',
@@ -907,14 +1195,40 @@ export const UI_COPY: Record<
             'Au service des foyers, commerçants et éleveurs de Taroudant et de la région Souss-Massa avec un accueil personnalisé.',
         },
       ],
+      meetFarmer: {
+        kicker: 'Engagement Personnel · Rencontrez l’Agriculteur',
+        title: 'Rencontrez l’Agriculteur d’Atlas Farm Taroudant',
+        farmerName: 'Le Fondateur & Responsable de la Ferme',
+        farmerRole: 'Agriculteur & Éleveur à Taroudant',
+        photoPlaceholderTitle: 'Emplacement Photo de l’Agriculteur',
+        photoPlaceholderSub:
+          'Portrait chaleureux de l’agriculteur dans les pâturages de Taroudant (Remplacez par votre photo personnelle à tout moment)',
+        uploadPhotoBtn: 'Personnaliser la Photo',
+        resetPhotoBtn: 'Rétablir le Portrait par Défaut',
+        customUrlLabel: 'Lien URL de votre portrait ou téléversement :',
+        bioParagraph1:
+          'Né d’un attachement profond à la terre fertile et aux oliveraies de la vallée de Taroudant, mon métier d’agriculteur repose sur une conviction simple : une terre respectée et des animaux élevés avec soin offrent les produits les plus sains et authentiques.',
+        bioParagraph2:
+          'Chaque matin dès l’aube, je parcours personnellement nos enclos pour vérifier la luzerne fraîche, superviser la traite matinale de nos vaches laitières et veiller sur nos veaux, moutons et chèvres. Pour moi, l’agriculture est une passion vivante fondée sur la patience, le respect de la nature et le travail quotidien.',
+        bioParagraph3:
+          'Lorsque vous visitez Atlas Farm Taroudant ou m’écrivez sur WhatsApp, vous échangez directement avec moi. Que ce soit pour du lait frais quotidien ou pour choisir du bétail, je m’engage personnellement sur la qualité, la fraîcheur et l’honnêteté de chaque produit.',
+        quote:
+          '« Une bonne agriculture commence par l’amour de la terre de Taroudant, le soin attentif de chaque animal et une parole honnête envers chaque client. »',
+        valuesList: [
+          { label: 'Attachement à la Terre', value: 'Vallée du Souss & Taroudant' },
+          { label: 'Passion Agricole', value: 'Suivi Quotidien du Troupeau & de la Traite' },
+          { label: 'Engagement Qualité', value: 'Sélection Directe & Transparence Totale' },
+        ],
+        directCtaLabel: 'Échanger Directement avec l’Agriculteur sur WhatsApp',
+      },
     },
     products: {
       kicker: 'Nos Produits & Services',
       title: 'Catalogue de la Ferme & Disponibilité du Bétail',
       subtitle:
-        'Découvrez nos trois grandes catégories ci-dessous. La disponibilité des animaux et des récoltes évoluant naturellement au fil des saisons, les tarifs sont confirmés directement avec l’agriculteur.',
+        'Découvrez nos trois grandes catégories ci-dessous. Filtrez par catégorie ou triez par nom et prix indicatif pour trouver rapidement ce que vous cherchez.',
       sampleNotice:
-        'Catalogue Modifiable : Les tarifs et disponibilités sont présentés à titre d’exemple configurable (« Contactez-nous pour les tarifs ») jusqu’à leur mise à jour par le propriétaire.',
+        'Catalogue Modifiable : Les tarifs indicatifs (en MAD) et disponibilités sont configurables par le propriétaire. Contactez-nous pour confirmer le tarif du jour.',
       editModeBtn: 'Personnaliser Tarifs & Téléphone',
       editModeActiveBtn: 'Terminer la Personnalisation',
       searchPlaceholder: 'Rechercher lait, vaches, veaux, moutons, chèvres, miel...',
@@ -924,15 +1238,26 @@ export const UI_COPY: Record<
         livestock: 'Bétail & Élevage',
         farm_goods: 'Produits de la Ferme',
       },
+      sortLabels: {
+        filterByCategoryLabel: 'Filtrer par Catégorie :',
+        sortByLabel: 'Trier les Produits par :',
+        featured: 'Sélection de la Ferme',
+        name_asc: 'Nom (A–Z)',
+        name_desc: 'Nom (Z–A)',
+        price_asc: 'Prix (Croissant)',
+        price_desc: 'Prix (Décroissant)',
+        showingCount: 'produits affichés',
+        referencePriceEditLabel: 'Prix de Référence pour le Tri (MAD) :',
+      },
       availabilityLabels: {
         available_daily: 'Traite Quotidienne · Selon Volume du Jour',
         seasonal_or_inquire: 'Saisonnier / Quantité Limitée · Nous Consulter',
         upon_inquiry: 'Sélection Directe à la Ferme sur Demande',
       },
       whatsappBtn: 'Demander sur WhatsApp',
-      priceLabel: 'Tarif',
-      emptyState: 'Aucun produit ne correspond à votre recherche.',
-      resetFilterBtn: 'Afficher Tous les Produits',
+      priceLabel: 'Tarif Indicatif',
+      emptyState: 'Aucun produit ne correspond à votre filtre ou recherche.',
+      resetFilterBtn: 'Réinitialiser Filtres & Tri',
     },
     gallery: {
       kicker: 'Galerie de la Ferme',
@@ -992,6 +1317,41 @@ export const UI_COPY: Record<
       directBannerText:
         'Contactez-nous directement par WhatsApp ou via le formulaire ci-dessous pour organiser votre visite à Taroudant.',
       directBannerBtn: 'Écrire à la Ferme sur WhatsApp',
+    },
+    testimonials: {
+      kicker: 'Témoignages Clients · Taroudant & Souss-Massa',
+      title: 'L’Avis des Familles et Éleveurs de la Région de Taroudant',
+      subtitle:
+        'La confiance et le bouche-à-oreille sont au cœur du monde agricole marocain. Découvrez les retours des familles, éleveurs et partenaires locaux ou partagez votre propre expérience.',
+      sampleDisclaimer:
+        'Note de transparence : Les témoignages initiaux ci-dessous sont présentés à titre d’exemple modifiable. Vous pouvez ajouter un avis client réel via le bouton « Partager Votre Avis ».',
+      filters: {
+        all: 'Tous les Avis',
+        dairy: 'Lait Frais & Produits Laitiers',
+        livestock: 'Bétail & Élevage',
+        farm_goods: 'Œufs, Miel & Récoltes',
+      },
+      addReviewBtn: 'Partager Votre Avis',
+      cancelReviewBtn: 'Fermer le Formulaire',
+      formTitle: 'Publier un Avis Client',
+      formSubtitle:
+        'Vous avez acheté du lait frais, du bétail ou des produits du terroir chez Atlas Farm Taroudant ? Partagez votre témoignage.',
+      fields: {
+        clientName: 'Votre Nom',
+        clientNamePlaceholder: 'ex. Omar El Fassi',
+        clientLocation: 'Ville / Localité au Maroc',
+        clientLocationPlaceholder: 'ex. Taroudant, Ouled Teïma, Agadir',
+        category: 'Catégorie',
+        productPurchased: 'Produit ou Bétail Acheté',
+        productPurchasedPlaceholder: 'ex. Lait de vache frais, Vache laitière, Mouton, Miel',
+        rating: 'Note',
+        quote: 'Votre Témoignage',
+        quotePlaceholder:
+          'Partagez votre expérience concernant la fraîcheur des produits, la santé du bétail ou l’accueil à la ferme...',
+        submitBtn: 'Publier l’Avis Client',
+      },
+      verifiedClientBadge: 'Avis Client Enregistré',
+      purchasedLabel: 'Produit :',
     },
     contact: {
       kicker: 'Localisation & Contact',
@@ -1137,14 +1497,40 @@ export const UI_COPY: Record<
             'خدمة الأسر والكسّابة والمهنيين في تارودانت وجهات سوس ماسة بروح الضيافة المغربية.',
         },
       ],
+      meetFarmer: {
+        kicker: 'إشراف شخصي · تعرّف على الفلاح',
+        title: 'تعرّف على الفلاح مؤسس ضيعة أطلس تارودانت',
+        farmerName: 'مؤسس ومسؤول الضيعة',
+        farmerRole: 'فلاح ومربي ماشية بإقليم تارودانت',
+        photoPlaceholderTitle: 'مكان مخصص لصورة الفلاح',
+        photoPlaceholderSub:
+          'صورة ترحيبية للفلاح في مراعي تارودانت (يمكن لصاحب الضيعة استبدالها بصورته الشخصية في أي وقت)',
+        uploadPhotoBtn: 'تغيير صورة الفلاح',
+        resetPhotoBtn: 'استعادة الصورة الافتراضية',
+        customUrlLabel: 'أدخل رابط الصورة أو اختر ملفاً:',
+        bioParagraph1:
+          'انطلاقاً من ارتباط وثيق بأرض تارودانت الطيبة وحقولها ومراعيها، أؤمن بأن الفلاحة الحقيقية تبدأ من احترام الأرض والعناية الصادقة بالماشية لتقديم منتج نقي وطبيعي يليق بأسرنا وزبنائنا.',
+        bioParagraph2:
+          'مع إشراقة كل صباح، أشرف بنفسي على تفقد الحظائر، ومراقبة جودة أعلاف الفصة الخضراء، ومتابعة عملية الحلب الصباحي للأبقار ورعاية العجول والأغنام والماعز. الفلاحة بالنسبة لي ليست مجرد مهنة، بل هي شغف يومي وتراث مغربي أصيل يقوم على الصبر والأمانة.',
+        bioParagraph3:
+          'عندما تتواصلون مع ضيعة أطلس تارودانت أو تزوروننا بعين المكان، فإنكم تتحدثون معي مباشرة. التزامي الشخصي معكم هو الوضوح التام، والجودة العالية، والطراوة التي أفتخر بتقديمها لكل بيت ومربي ماشية.',
+        quote:
+          '«البركة في الفلاحة أساسها حب أرض تارودانت، والرفق بالماشية، والكلمة الصادقة مع كل زبون يقصد ضيعتنا.»',
+        valuesList: [
+          { label: 'الارتباط بالأرض', value: 'سهل سوس ماسة ومراعي تارودانت' },
+          { label: 'الشغف بالفلاحة', value: 'إشراف يومي مباشر على الحلب والقطيع' },
+          { label: 'الالتزام بالجودة', value: 'معاينة مباشرة ومصداقية تامة' },
+        ],
+        directCtaLabel: 'تحدث مباشرة مع الفلاح عبر واتساب',
+      },
     },
     products: {
       kicker: 'منتجاتنا وخدماتنا',
       title: 'دليل منتجات الضيعة والماشية المتوفرة',
       subtitle:
-        'تصفحوا فئات منتجات الضيعة الثلاث أدناه. نظراً لأن توفر الماشية والمحاصيل الفلاحية يتغير طبيعياً حسب المواسم والإنتاج اليومي، يتم تأكيد الأسعار والتوفر مباشرة مع الفلاح.',
+        'تصفحوا فئات منتجات الضيعة الثلاث أدناه. يمكنكم تصفية المنتجات حسب الفئة أو ترتيبها حسب الاسم أو السعر التقريبي للوصول السريع إلى طلبكم.',
       sampleNotice:
-        'محتوى نموذجي قابل للتعديل: الأسعار وحالة التوفر معروضة كبيانات قابلة للتخصيص ("اتصل بنا لمعرفة الأسعار") إلى حين تحديثها من طرف إدارة الضيعة.',
+        'محتوى نموذجي قابل للتعديل: الأسعار التقريبية (بالدرهم) وحالة التوفر قابلة للتخصيص من طرف إدارة الضيعة. تواصلوا معنا لتأكيد أسعار اليوم.',
       editModeBtn: 'تعديل الأسعار ورقم الهاتف',
       editModeActiveBtn: 'إنهاء التعديل',
       searchPlaceholder: 'ابحث عن الحليب، الأبقار، العجول، الأغنام، الماعز، العسل...',
@@ -1154,15 +1540,26 @@ export const UI_COPY: Record<
         livestock: 'الماشية والأبقار',
         farm_goods: 'منتجات الضيعة والمحاصيل',
       },
+      sortLabels: {
+        filterByCategoryLabel: 'تصفية حسب الفئة:',
+        sortByLabel: 'ترتيب المنتجات حسب:',
+        featured: 'الترتيب المميز للضيعة',
+        name_asc: 'الاسم (أ – ي)',
+        name_desc: 'الاسم (ي – أ)',
+        price_asc: 'السعر (من الأقل إلى الأعلى)',
+        price_desc: 'السعر (من الأعلى إلى الأقل)',
+        showingCount: 'منتجات معروضة',
+        referencePriceEditLabel: 'السعر المرجعي للترتيب (درهم):',
+      },
       availabilityLabels: {
         available_daily: 'حلب يومي طازج · استفسر عن كمية اليوم',
         seasonal_or_inquire: 'إنتاج موسمي / محدود · تواصل للتأكد من التوفر',
         upon_inquiry: 'متوفر بالمعاينة والطلب المباشر بالضيعة',
       },
       whatsappBtn: 'استفسر عبر واتساب',
-      priceLabel: 'السعر',
-      emptyState: 'لا توجد منتجات مطابقة لبحثكم حالياً.',
-      resetFilterBtn: 'عرض جميع المنتجات',
+      priceLabel: 'السعر التقريبي',
+      emptyState: 'لا توجد منتجات مطابقة لفلتر الفئة أو بحثكم حالياً.',
+      resetFilterBtn: 'إعادة ضبط التصفية والترتيب',
     },
     gallery: {
       kicker: 'معرض صور الضيعة',
@@ -1222,6 +1619,41 @@ export const UI_COPY: Record<
       directBannerText:
         'تواصلوا معنا مباشرة عبر واتساب أو عبر استمارة الاتصال أسفله لتحديد موعد زيارة الضيعة بتارودانت.',
       directBannerBtn: 'تحدث مع الفلاح عبر واتساب',
+    },
+    testimonials: {
+      kicker: 'آراء زبنائنا المحليين · تارودانت وسوس ماسة',
+      title: 'شهادات الأسر ومربي الماشية حول ضيعة أطلس تارودانت',
+      subtitle:
+        'الثقة والكلمة الطيبة هما أساس المعاملات الفلاحية المغربية. اطلعوا على آراء الزبناء والكسّابة المحليين بمنطقة تارودانت أو شاركونا تجربتكم الخاصة.',
+      sampleDisclaimer:
+        'ملاحظة شفافية: الشهادات الأولية أسفله معروضة كأمثلة قابلة للتعديل، ويمكن لأي زبون إضافة تقييمه الحقيقي مباشرة عبر زر "شارك تجربتك معنا".',
+      filters: {
+        all: 'جميع الشهادات',
+        dairy: 'الحليب ومشتقاته الطرية',
+        livestock: 'الأبقار والماشية',
+        farm_goods: 'البيض والعسل والمحاصيل',
+      },
+      addReviewBtn: 'شارك تجربتك معنا',
+      cancelReviewBtn: 'إغلاق الاستمارة',
+      formTitle: 'إضافة شهادة أو تقييم زبون',
+      formSubtitle:
+        'هل سبق لكم اقتناء الحليب الطري أو الماشية أو منتجات الضيعة من ضيعة أطلس تارودانت؟ يسعدنا مشاركة رأيكم.',
+      fields: {
+        clientName: 'الاسم الكامل',
+        clientNamePlaceholder: 'مثال: عمر الفاسي',
+        clientLocation: 'المدينة أو الجماعة',
+        clientLocationPlaceholder: 'مثال: تارودانت، أولاد تايمة، أكادير',
+        category: 'فئة المنتج',
+        productPurchased: 'المنتج أو الماشية المقتناة',
+        productPurchasedPlaceholder: 'مثال: حليب البقر الطري، بقرة حلوب، خروف، عسل حر',
+        rating: 'التقييم',
+        quote: 'شهادتكم أو رأيكم',
+        quotePlaceholder:
+          'شاركونا رأيكم حول طراوة الحليب والمنتجات، أو صحة الماشية، أو التعامل المباشر بالضيعة...',
+        submitBtn: 'نشر شهادة الزبون',
+      },
+      verifiedClientBadge: 'شهادة مضافة من زبون',
+      purchasedLabel: 'المنتج:',
     },
     contact: {
       kicker: 'الموقع والاتصال',

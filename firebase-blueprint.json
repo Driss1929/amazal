@@ -1,0 +1,352 @@
+{
+  "entities": {
+    "AnimalRecord": {
+      "title": "AnimalRecord",
+      "description": "Module 1: Complete animal lifecycle, QR digital passport, breeding, weight, veterinary status, and profitability record.",
+      "type": "object",
+      "properties": {
+        "animalCode": {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^[A-Z0-9\\-]+$",
+          "description": "Unique human-readable tag and QR identifier (e.g., AF-COW-101)"
+        },
+        "species": {
+          "type": "string",
+          "maxLength": 30,
+          "enum": ["Cattle", "Sheep", "Goat"]
+        },
+        "breed": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "gender": {
+          "type": "string",
+          "maxLength": 20,
+          "enum": ["Female", "Male"]
+        },
+        "birthDate": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "weightKg": {
+          "type": "number"
+        },
+        "dailyMilkLiters": {
+          "type": "number"
+        },
+        "feedCostMadPerDay": {
+          "type": "number"
+        },
+        "healthStatus": {
+          "type": "string",
+          "maxLength": 30,
+          "enum": ["Healthy", "Monitoring", "Vaccination Due"]
+        },
+        "vaccinationNote": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "animalCode",
+        "species",
+        "breed",
+        "gender",
+        "birthDate",
+        "weightKg",
+        "dailyMilkLiters",
+        "feedCostMadPerDay",
+        "healthStatus",
+        "vaccinationNote",
+        "ownerId",
+        "createdAt"
+      ]
+    },
+    "MilkProductionRecord": {
+      "title": "MilkProductionRecord",
+      "description": "Module 2: Dairy production, Milk Balance formula, tank storage, temperature, and batch traceability.",
+      "type": "object",
+      "properties": {
+        "batchCode": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "productionDate": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "session": {
+          "type": "string",
+          "maxLength": 20,
+          "enum": ["Morning", "Evening"]
+        },
+        "openingStockLiters": {
+          "type": "number"
+        },
+        "producedLiters": {
+          "type": "number"
+        },
+        "soldLiters": {
+          "type": "number"
+        },
+        "processedLiters": {
+          "type": "number"
+        },
+        "lossLiters": {
+          "type": "number"
+        },
+        "closingBalanceLiters": {
+          "type": "number"
+        },
+        "tempCelsius": {
+          "type": "number"
+        },
+        "qualityStatus": {
+          "type": "string",
+          "maxLength": 30,
+          "enum": ["Grade A Passed", "Pasteurized", "Quality Hold"]
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "batchCode",
+        "productionDate",
+        "session",
+        "openingStockLiters",
+        "producedLiters",
+        "soldLiters",
+        "processedLiters",
+        "lossLiters",
+        "closingBalanceLiters",
+        "tempCelsius",
+        "qualityStatus",
+        "ownerId",
+        "createdAt"
+      ]
+    },
+    "CropFieldRecord": {
+      "title": "CropFieldRecord",
+      "description": "Module 3: Diversified crop management, plot mapping, soil moisture, and smart irrigation in Taroudant.",
+      "type": "object",
+      "properties": {
+        "fieldCode": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "fieldName": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "cropCategory": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "areaHectares": {
+          "type": "number"
+        },
+        "soilMoisturePct": {
+          "type": "number"
+        },
+        "dailyWaterM3": {
+          "type": "number"
+        },
+        "expectedYieldTons": {
+          "type": "number"
+        },
+        "irrigationStatus": {
+          "type": "string",
+          "maxLength": 40,
+          "enum": ["Optimal Moisture", "Scheduled Drip", "Needs Irrigation"]
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "fieldCode",
+        "fieldName",
+        "cropCategory",
+        "areaHectares",
+        "soilMoisturePct",
+        "dailyWaterM3",
+        "expectedYieldTons",
+        "irrigationStatus",
+        "ownerId",
+        "createdAt"
+      ]
+    },
+    "ErpOperationRecord": {
+      "title": "ErpOperationRecord",
+      "description": "Modules 4, 6, 7, 8, 9, 10, 11: Unified ERP record for Manufacturing, Procurement, Inventory, Logistics, Finance, HR, and CRM.",
+      "type": "object",
+      "properties": {
+        "moduleType": {
+          "type": "string",
+          "maxLength": 30,
+          "enum": [
+            "manufacturing",
+            "procurement",
+            "inventory",
+            "logistics",
+            "finance",
+            "hr",
+            "crm"
+          ]
+        },
+        "referenceCode": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "quantityOrMetric": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "amountMad": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "moduleType",
+        "referenceCode",
+        "title",
+        "subtitle",
+        "quantityOrMetric",
+        "unit",
+        "amountMad",
+        "status",
+        "ownerId",
+        "createdAt"
+      ]
+    },
+    "CommercialOrderRecord": {
+      "title": "CommercialOrderRecord",
+      "description": "Module 5: B2C Retail and B2B Wholesale Orders with automated cross-module stock reservation, logistics routing, and revenue posting.",
+      "type": "object",
+      "properties": {
+        "orderCode": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "channel": {
+          "type": "string",
+          "maxLength": 30,
+          "enum": ["B2C Retail", "B2B Wholesale"]
+        },
+        "customerName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "itemsSummary": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "reservedLiters": {
+          "type": "number"
+        },
+        "totalAmountMad": {
+          "type": "number"
+        },
+        "paymentTerms": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "workflowTrace": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 30,
+          "enum": ["Reserved & Scheduled", "Dispatched", "Delivered"]
+        },
+        "ownerId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "orderCode",
+        "channel",
+        "customerName",
+        "itemsSummary",
+        "reservedLiters",
+        "totalAmountMad",
+        "paymentTerms",
+        "workflowTrace",
+        "status",
+        "ownerId",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/animals/{animalId}": {
+      "schema": { "$ref": "#/entities/AnimalRecord" },
+      "description": "Livestock and animal digital passport records"
+    },
+    "/milk_records/{recordId}": {
+      "schema": { "$ref": "#/entities/MilkProductionRecord" },
+      "description": "Daily morning and evening dairy production and milk balance ledger"
+    },
+    "/crop_fields/{fieldId}": {
+      "schema": { "$ref": "#/entities/CropFieldRecord" },
+      "description": "Diversified crop plots and smart irrigation records"
+    },
+    "/erp_operations/{opId}": {
+      "schema": { "$ref": "#/entities/ErpOperationRecord" },
+      "description": "Manufacturing, Procurement, Inventory, Logistics, Finance, HR, and CRM records"
+    },
+    "/commercial_orders/{orderId}": {
+      "schema": { "$ref": "#/entities/CommercialOrderRecord" },
+      "description": "B2C retail and B2B wholesale orders with cross-module workflow automation"
+    }
+  }
+}

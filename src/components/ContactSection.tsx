@@ -270,8 +270,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </div>
 
             {/* Interactive Google Maps Embed */}
-            <div className="rounded-2xl overflow-hidden border border-[#1C251E]/12 bg-[#F2ECE1]">
-              <div className="px-5 py-3.5 border-b border-[#1C251E]/10 flex items-center justify-between gap-2">
+            <div
+              id="location-map-card"
+              className="rounded-2xl overflow-hidden border border-[#1C251E]/12 bg-[#F2ECE1]"
+            >
+              <div className="px-5 py-3.5 border-b border-[#1C251E]/10 flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-xs font-semibold text-[#1A3A2A]">
                   {copy.mapTitle}
                 </h3>
@@ -281,6 +284,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               </div>
               <div className="aspect-[16/10] w-full bg-[#E4DDD0]">
                 <iframe
+                  id="google-maps-iframe"
                   title={copy.mapTitle}
                   src={mapEmbedUrl}
                   className="w-full h-full border-0"
@@ -289,8 +293,31 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   allowFullScreen
                 />
               </div>
-              <div className="p-4 text-xs text-[#3A473D] leading-relaxed">
-                {copy.mapNote}
+              <div className="p-4 space-y-3 border-t border-[#1C251E]/10 bg-[#FAF7F2]/70">
+                <p className="text-xs text-[#3A473D] leading-relaxed">
+                  {copy.mapNote}
+                </p>
+                <div className="space-y-1.5">
+                  <label
+                    htmlFor="direct-map-placeholder-input"
+                    className="block text-xs font-semibold text-[#1A3A2A]"
+                  >
+                    {copy.mapQueryInputLabel}
+                  </label>
+                  <input
+                    id="direct-map-placeholder-input"
+                    type="text"
+                    value={config.mapQuery}
+                    onChange={(e) => onUpdateConfig({ mapQuery: e.target.value })}
+                    placeholder="e.g., 30.4703, -8.8770 or Taroudant, Souss-Massa, Morocco"
+                    className="w-full px-3 py-2 text-xs font-mono-tabular bg-[#FAF7F2] border border-[#1C251E]/20 rounded-lg text-[#1C251E]"
+                  />
+                  <p className="text-[11px] text-[#5C4033]">
+                    Code configuration note: Replace default placeholder{' '}
+                    <code className="font-mono-tabular">DEFAULT_FARM_CONFIG.mapQuery</code> in{' '}
+                    <code className="font-mono-tabular">src/data/farmData.ts</code> with exact farm GPS coordinates when finalized.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

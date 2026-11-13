@@ -11,19 +11,26 @@ import { FloatingWhatsApp, Footer } from './components/FooterAndFloating';
 import { HeroSection } from './components/HeroSection';
 import { Navbar } from './components/Navbar';
 import { ProductCatalog } from './components/ProductCatalog';
-import { DEFAULT_FARM_CONFIG, INITIAL_PRODUCTS } from './data/farmData';
+import { TestimonialsSection } from './components/TestimonialsSection';
+import {
+  DEFAULT_FARM_CONFIG,
+  INITIAL_PRODUCTS,
+  INITIAL_TESTIMONIALS,
+} from './data/farmData';
 import type {
   AvailabilityKey,
   FarmContactConfig,
   Language,
   ProductItem,
   SubmittedInquiry,
+  TestimonialItem,
 } from './utils/farmLogic';
 
 const STORAGE_KEYS = {
   lang: 'atlas_farm_lang_v1',
   config: 'atlas_farm_config_v2',
-  products: 'atlas_farm_products_v1',
+  products: 'atlas_farm_products_v2',
+  testimonials: 'atlas_farm_testimonials_v1',
   inquiries: 'atlas_farm_inquiries_v1',
 };
 
@@ -67,6 +74,21 @@ export default function App() {
     return INITIAL_PRODUCTS;
   });
 
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.testimonials);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch {
+      // Ignore storage errors
+    }
+    return INITIAL_TESTIMONIALS;
+  });
+
   const [submittedInquiries, setSubmittedInquiries] = useState<SubmittedInquiry[]>(
     () => {
       try {
@@ -107,7 +129,11 @@ export default function App() {
 
   const handleUpdateProduct = (
     productId: string,
-    updates: { priceText?: string; availability?: AvailabilityKey }
+    updates: {
+      priceText?: string;
+      availability?: AvailabilityKey;
+      referencePriceMad?: number;
+    }
   ) => {
     setProducts((prev) => {
       const next = prev.map((item) => {
@@ -115,6 +141,10 @@ export default function App() {
         return {
           ...item,
           availability: updates.availability ?? item.availability,
+          referencePriceMad:
+            updates.referencePriceMad !== undefined
+              ? updates.referencePriceMad
+              : item.referencePriceMad,
           priceDisplay:
             updates.priceText !== undefined
               ? {
@@ -126,6 +156,18 @@ export default function App() {
       });
       try {
         localStorage.setItem(STORAGE_KEYS.products, JSON.stringify(next));
+      } catch {
+        // Ignore storage errors
+      }
+      return next;
+    });
+  };
+
+  const handleAddTestimonial = (newItem: TestimonialItem) => {
+    setTestimonials((prev) => {
+      const next = [newItem, ...prev];
+      try {
+        localStorage.setItem(STORAGE_KEYS.testimonials, JSON.stringify(next));
       } catch {
         // Ignore storage errors
       }
@@ -159,7 +201,10 @@ export default function App() {
       <main className="flex-1">
         <HeroSection language={language} />
 
-        <AboutSection language={language} />
+        <AboutSection
+          language={language}
+          whatsappNumber={farmConfig.whatsappNumber}
+        />
 
         <ProductCatalog
           language={language}
@@ -179,6 +224,12 @@ export default function App() {
         <WhyUsSection
           language={language}
           whatsappNumber={farmConfig.whatsappNumber}
+        />
+
+        <TestimonialsSection
+          language={language}
+          testimonials={testimonials}
+          onAddTestimonial={handleAddTestimonial}
         />
 
         <ContactSection

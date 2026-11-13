@@ -1,0 +1,239 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 1: Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core Primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        request.auth.token.email == 'idrisselghazi9@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Validation Blueprint 1: AnimalRecord
+    function isValidAnimalRecord(data) {
+      return data.keys().hasAll([
+        'animalCode', 'species', 'breed', 'gender', 'birthDate',
+        'weightKg', 'dailyMilkLiters', 'feedCostMadPerDay',
+        'healthStatus', 'vaccinationNote', 'ownerId', 'createdAt'
+      ]) &&
+      data.keys().hasOnly([
+        'animalCode', 'species', 'breed', 'gender', 'birthDate',
+        'weightKg', 'dailyMilkLiters', 'feedCostMadPerDay',
+        'healthStatus', 'vaccinationNote', 'ownerId', 'createdAt'
+      ]) &&
+      data.animalCode is string && data.animalCode.size() >= 2 && data.animalCode.size() <= 40 && data.animalCode.matches('^[A-Z0-9\\-]+$') &&
+      data.species is string && data.species.size() <= 30 && data.species in ['Cattle', 'Sheep', 'Goat'] &&
+      data.breed is string && data.breed.size() >= 1 && data.breed.size() <= 60 &&
+      data.gender is string && data.gender.size() <= 20 && data.gender in ['Female', 'Male'] &&
+      data.birthDate is string && data.birthDate.size() >= 4 && data.birthDate.size() <= 20 &&
+      data.weightKg is number && data.weightKg >= 0 && data.weightKg <= 3000 &&
+      data.dailyMilkLiters is number && data.dailyMilkLiters >= 0 && data.dailyMilkLiters <= 120 &&
+      data.feedCostMadPerDay is number && data.feedCostMadPerDay >= 0 && data.feedCostMadPerDay <= 5000 &&
+      data.healthStatus is string && data.healthStatus.size() <= 30 && data.healthStatus in ['Healthy', 'Monitoring', 'Vaccination Due'] &&
+      data.vaccinationNote is string && data.vaccinationNote.size() <= 160 &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId == request.auth.uid &&
+      data.createdAt is timestamp;
+    }
+
+    // Validation Blueprint 2: MilkProductionRecord
+    function isValidMilkRecord(data) {
+      return data.keys().hasAll([
+        'batchCode', 'productionDate', 'session', 'openingStockLiters',
+        'producedLiters', 'soldLiters', 'processedLiters', 'lossLiters',
+        'closingBalanceLiters', 'tempCelsius', 'qualityStatus', 'ownerId', 'createdAt'
+      ]) &&
+      data.keys().hasOnly([
+        'batchCode', 'productionDate', 'session', 'openingStockLiters',
+        'producedLiters', 'soldLiters', 'processedLiters', 'lossLiters',
+        'closingBalanceLiters', 'tempCelsius', 'qualityStatus', 'ownerId', 'createdAt'
+      ]) &&
+      data.batchCode is string && data.batchCode.size() >= 2 && data.batchCode.size() <= 40 &&
+      data.productionDate is string && data.productionDate.size() >= 4 && data.productionDate.size() <= 20 &&
+      data.session is string && data.session.size() <= 20 && data.session in ['Morning', 'Evening'] &&
+      data.openingStockLiters is number && data.openingStockLiters >= 0 &&
+      data.producedLiters is number && data.producedLiters >= 0 &&
+      data.soldLiters is number && data.soldLiters >= 0 &&
+      data.processedLiters is number && data.processedLiters >= 0 &&
+      data.lossLiters is number && data.lossLiters >= 0 &&
+      data.closingBalanceLiters is number &&
+      data.tempCelsius is number && data.tempCelsius >= -10 && data.tempCelsius <= 50 &&
+      data.qualityStatus is string && data.qualityStatus.size() <= 30 && data.qualityStatus in ['Grade A Passed', 'Pasteurized', 'Quality Hold'] &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId == request.auth.uid &&
+      data.createdAt is timestamp;
+    }
+
+    // Validation Blueprint 3: CropFieldRecord
+    function isValidCropField(data) {
+      return data.keys().hasAll([
+        'fieldCode', 'fieldName', 'cropCategory', 'areaHectares',
+        'soilMoisturePct', 'dailyWaterM3', 'expectedYieldTons',
+        'irrigationStatus', 'ownerId', 'createdAt'
+      ]) &&
+      data.keys().hasOnly([
+        'fieldCode', 'fieldName', 'cropCategory', 'areaHectares',
+        'soilMoisturePct', 'dailyWaterM3', 'expectedYieldTons',
+        'irrigationStatus', 'ownerId', 'createdAt'
+      ]) &&
+      data.fieldCode is string && data.fieldCode.size() >= 2 && data.fieldCode.size() <= 40 &&
+      data.fieldName is string && data.fieldName.size() >= 2 && data.fieldName.size() <= 80 &&
+      data.cropCategory is string && data.cropCategory.size() >= 2 && data.cropCategory.size() <= 50 &&
+      data.areaHectares is number && data.areaHectares > 0 && data.areaHectares <= 10000 &&
+      data.soilMoisturePct is number && data.soilMoisturePct >= 0 && data.soilMoisturePct <= 100 &&
+      data.dailyWaterM3 is number && data.dailyWaterM3 >= 0 &&
+      data.expectedYieldTons is number && data.expectedYieldTons >= 0 &&
+      data.irrigationStatus is string && data.irrigationStatus.size() <= 40 && data.irrigationStatus in ['Optimal Moisture', 'Scheduled Drip', 'Needs Irrigation'] &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId == request.auth.uid &&
+      data.createdAt is timestamp;
+    }
+
+    // Validation Blueprint 4: ErpOperationRecord
+    function isValidErpOperation(data) {
+      return data.keys().hasAll([
+        'moduleType', 'referenceCode', 'title', 'subtitle',
+        'quantityOrMetric', 'unit', 'amountMad', 'status', 'ownerId', 'createdAt'
+      ]) &&
+      data.keys().hasOnly([
+        'moduleType', 'referenceCode', 'title', 'subtitle',
+        'quantityOrMetric', 'unit', 'amountMad', 'status', 'ownerId', 'createdAt'
+      ]) &&
+      data.moduleType is string && data.moduleType.size() <= 30 && data.moduleType in [
+        'manufacturing', 'procurement', 'inventory', 'logistics', 'finance', 'hr', 'crm'
+      ] &&
+      data.referenceCode is string && data.referenceCode.size() >= 2 && data.referenceCode.size() <= 40 &&
+      data.title is string && data.title.size() >= 2 && data.title.size() <= 120 &&
+      data.subtitle is string && data.subtitle.size() <= 200 &&
+      data.quantityOrMetric is number &&
+      data.unit is string && data.unit.size() <= 30 &&
+      data.amountMad is number &&
+      data.status is string && data.status.size() >= 2 && data.status.size() <= 40 &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId == request.auth.uid &&
+      data.createdAt is timestamp;
+    }
+
+    // Validation Blueprint 5: CommercialOrderRecord
+    function isValidCommercialOrder(data) {
+      return data.keys().hasAll([
+        'orderCode', 'channel', 'customerName', 'itemsSummary',
+        'reservedLiters', 'totalAmountMad', 'paymentTerms',
+        'workflowTrace', 'status', 'ownerId', 'createdAt'
+      ]) &&
+      data.keys().hasOnly([
+        'orderCode', 'channel', 'customerName', 'itemsSummary',
+        'reservedLiters', 'totalAmountMad', 'paymentTerms',
+        'workflowTrace', 'status', 'ownerId', 'createdAt'
+      ]) &&
+      data.orderCode is string && data.orderCode.size() >= 2 && data.orderCode.size() <= 40 &&
+      data.channel is string && data.channel.size() <= 30 && data.channel in ['B2C Retail', 'B2B Wholesale'] &&
+      data.customerName is string && data.customerName.size() >= 2 && data.customerName.size() <= 100 &&
+      data.itemsSummary is string && data.itemsSummary.size() >= 2 && data.itemsSummary.size() <= 240 &&
+      data.reservedLiters is number && data.reservedLiters >= 0 &&
+      data.totalAmountMad is number && data.totalAmountMad >= 0 &&
+      data.paymentTerms is string && data.paymentTerms.size() >= 2 && data.paymentTerms.size() <= 50 &&
+      data.workflowTrace is string && data.workflowTrace.size() <= 240 &&
+      data.status is string && data.status.size() <= 30 && data.status in ['Reserved & Scheduled', 'Dispatched', 'Delivered'] &&
+      data.ownerId is string && data.ownerId.size() >= 1 && data.ownerId.size() <= 128 && data.ownerId == request.auth.uid &&
+      data.createdAt is timestamp;
+    }
+
+    match /admins/{adminId} {
+      allow get: if isVerifiedUser() && isValidId(adminId) && request.auth.uid == adminId;
+      allow list, create, update, delete: if false;
+    }
+
+    match /animals/{animalId} {
+      allow get: if isVerifiedUser() && isValidId(animalId) && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerifiedUser() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow create: if isVerifiedUser() && isValidId(animalId) && isValidAnimalRecord(incoming()) && incoming().createdAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(animalId) && isValidAnimalRecord(incoming()) &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          isAdmin() ||
+          (existing().ownerId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['weightKg', 'dailyMilkLiters', 'feedCostMadPerDay', 'healthStatus', 'vaccinationNote']))
+        );
+      allow delete: if isVerifiedUser() && isValidId(animalId) && (existing().ownerId == request.auth.uid || isAdmin());
+    }
+
+    match /milk_records/{recordId} {
+      allow get: if isVerifiedUser() && isValidId(recordId) && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerifiedUser() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow create: if isVerifiedUser() && isValidId(recordId) && isValidMilkRecord(incoming()) && incoming().createdAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(recordId) && isValidMilkRecord(incoming()) &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          isAdmin() ||
+          (existing().ownerId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['qualityStatus', 'tempCelsius']))
+        );
+      allow delete: if isVerifiedUser() && isValidId(recordId) && (existing().ownerId == request.auth.uid || isAdmin());
+    }
+
+    match /crop_fields/{fieldId} {
+      allow get: if isVerifiedUser() && isValidId(fieldId) && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerifiedUser() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow create: if isVerifiedUser() && isValidId(fieldId) && isValidCropField(incoming()) && incoming().createdAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(fieldId) && isValidCropField(incoming()) &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          isAdmin() ||
+          (existing().ownerId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['soilMoisturePct', 'dailyWaterM3', 'irrigationStatus']))
+        );
+      allow delete: if isVerifiedUser() && isValidId(fieldId) && (existing().ownerId == request.auth.uid || isAdmin());
+    }
+
+    match /erp_operations/{opId} {
+      allow get: if isVerifiedUser() && isValidId(opId) && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerifiedUser() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow create: if isVerifiedUser() && isValidId(opId) && isValidErpOperation(incoming()) && incoming().createdAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(opId) && isValidErpOperation(incoming()) &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          isAdmin() ||
+          (existing().ownerId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'quantityOrMetric', 'amountMad']))
+        );
+      allow delete: if isVerifiedUser() && isValidId(opId) && (existing().ownerId == request.auth.uid || isAdmin());
+    }
+
+    match /commercial_orders/{orderId} {
+      allow get: if isVerifiedUser() && isValidId(orderId) && (existing().ownerId == request.auth.uid || isAdmin());
+      allow list: if isVerifiedUser() && (existing().ownerId == request.auth.uid || isAdmin());
+      allow create: if isVerifiedUser() && isValidId(orderId) && isValidCommercialOrder(incoming()) && incoming().createdAt == request.time;
+      allow update: if isVerifiedUser() && isValidId(orderId) && isValidCommercialOrder(incoming()) &&
+        incoming().ownerId == existing().ownerId &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          isAdmin() ||
+          (existing().ownerId == request.auth.uid && existing().status != 'Delivered' && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'workflowTrace']))
+        );
+      allow delete: if isVerifiedUser() && isValidId(orderId) && (existing().ownerId == request.auth.uid || isAdmin());
+    }
+  }
+}
