@@ -4,13 +4,18 @@ import type {
   Language,
   ProductItem,
 } from '../utils/farmLogic';
+import heroLandscapeImg from '../assets/images/hero_taroudant_farm_1794590182955.jpg';
+import freshDairyImg from '../assets/images/product_fresh_dairy_milk_1794590184217.jpg';
+import cattleCalvesImg from '../assets/images/livestock_cattle_calves_1794590185899.jpg';
+import sheepGoatsImg from '../assets/images/livestock_sheep_goats_1794590186245.jpg';
+import honeyEggsHarvestImg from '../assets/images/farm_products_honey_eggs_1794590187128.jpg';
 
 export const FARM_IMAGES = {
-  heroLandscape: '/src/assets/images/hero_taroudant_farm_1794590182955.jpg',
-  freshDairy: '/src/assets/images/product_fresh_dairy_milk_1794590184217.jpg',
-  cattleCalves: '/src/assets/images/livestock_cattle_calves_1794590185899.jpg',
-  sheepGoats: '/src/assets/images/livestock_sheep_goats_1794590186245.jpg',
-  honeyEggsHarvest: '/src/assets/images/farm_products_honey_eggs_1794590187128.jpg',
+  heroLandscape: heroLandscapeImg,
+  freshDairy: freshDairyImg,
+  cattleCalves: cattleCalvesImg,
+  sheepGoats: sheepGoatsImg,
+  honeyEggsHarvest: honeyEggsHarvestImg,
 };
 
 export const DEFAULT_FARM_CONFIG: FarmContactConfig = {
