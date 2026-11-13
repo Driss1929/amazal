@@ -10,8 +10,13 @@ import { FarmGallery } from './components/FarmGallery';
 import { FloatingWhatsApp, Footer } from './components/FooterAndFloating';
 import { HeroSection } from './components/HeroSection';
 import { Navbar } from './components/Navbar';
+import { OnlineOrderingAndSubscriptions } from './components/OnlineOrderingAndSubscriptions';
 import { ProductCatalog } from './components/ProductCatalog';
+import { SeasonalProductsCalendar } from './components/SeasonalProductsCalendar';
+import { SmartFarmErpSuite } from './components/SmartFarmErpSuite';
+import { StandoutFarmSections } from './components/StandoutFarmSections';
 import { TestimonialsSection } from './components/TestimonialsSection';
+import { LivestockMarketplace } from './components/LivestockMarketplace';
 import {
   DEFAULT_FARM_CONFIG,
   INITIAL_PRODUCTS,
@@ -19,8 +24,10 @@ import {
 } from './data/farmData';
 import type {
   AvailabilityKey,
+  CustomerOrderRecord,
   FarmContactConfig,
   Language,
+  OrderStatus,
   ProductItem,
   SubmittedInquiry,
   TestimonialItem,
@@ -32,6 +39,7 @@ const STORAGE_KEYS = {
   products: 'atlas_farm_products_v2',
   testimonials: 'atlas_farm_testimonials_v1',
   inquiries: 'atlas_farm_inquiries_v1',
+  orders: 'atlas_farm_orders_v1',
 };
 
 export default function App() {
@@ -102,6 +110,21 @@ export default function App() {
       return [];
     }
   );
+
+  const [orders, setOrders] = useState<CustomerOrderRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.orders);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+    } catch {
+      // Ignore storage errors
+    }
+    return [];
+  });
 
   // Sync HTML lang and RTL/LTR direction whenever language changes
   useEffect(() => {
@@ -187,6 +210,32 @@ export default function App() {
     });
   };
 
+  const handleCreateOrder = (newOrder: CustomerOrderRecord) => {
+    setOrders((prev) => {
+      const next = [newOrder, ...prev];
+      try {
+        localStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(next));
+      } catch {
+        // Ignore storage errors
+      }
+      return next;
+    });
+  };
+
+  const handleAdvanceOrderStatus = (orderId: string, nextStatus: OrderStatus) => {
+    setOrders((prev) => {
+      const next = prev.map((ord) =>
+        ord.id === orderId ? { ...ord, status: nextStatus } : ord
+      );
+      try {
+        localStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(next));
+      } catch {
+        // Ignore storage errors
+      }
+      return next;
+    });
+  };
+
   return (
     <div
       dir={language === 'ar' ? 'rtl' : 'ltr'}
@@ -215,6 +264,31 @@ export default function App() {
             handleUpdateConfig({ whatsappNumber: newPhone })
           }
         />
+
+        <SeasonalProductsCalendar
+          language={language}
+          whatsappNumber={farmConfig.whatsappNumber}
+        />
+
+        <LivestockMarketplace
+          language={language}
+          whatsappNumber={farmConfig.whatsappNumber}
+        />
+
+        <OnlineOrderingAndSubscriptions
+          language={language}
+          whatsappNumber={farmConfig.whatsappNumber}
+          orders={orders}
+          onCreateOrder={handleCreateOrder}
+          onAdvanceOrderStatus={handleAdvanceOrderStatus}
+        />
+
+        <StandoutFarmSections
+          language={language}
+          whatsappNumber={farmConfig.whatsappNumber}
+        />
+
+        <SmartFarmErpSuite language={language} />
 
         <FarmGallery
           language={language}

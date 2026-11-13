@@ -11,6 +11,10 @@ import {
   buildGoogleMapsEmbedUrl,
   filterTestimonials,
   validateTestimonialInput,
+  calculateOrderSummary,
+  calculateSubscriptionMonthlySummary,
+  calculateFarmFinancialAnalytics,
+  generateSmartFarmAssistantAnswer,
   type ProductItem,
   type TestimonialItem,
 } from './farmLogic';
@@ -235,4 +239,103 @@ test('filterTestimonials and validateTestimonialInput handle multi-language revi
   );
   assert.equal(validReview.valid, true);
 });
+
+test('calculateOrderSummary and calculateSubscriptionMonthlySummary compute MAD totals accurately', () => {
+  const orderSummary = calculateOrderSummary({
+    quantity: 10,
+    unitPriceMad: 8,
+    deliveryZoneId: 'taroudant_center',
+    hasReferralCode: true,
+  });
+  // 10 * 8 = 80 MAD subtotal, 5% referral discount = 4 MAD, Taroudant center fee = 10 MAD -> 86 MAD total
+  assert.equal(orderSummary.subtotalMad, 80);
+  assert.equal(orderSummary.discountMad, 4);
+  assert.equal(orderSummary.deliveryFeeMad, 10);
+  assert.equal(orderSummary.totalMad, 86);
+  assert.equal(orderSummary.loyaltyPointsEarned, 8);
+
+  const subSummary = calculateSubscriptionMonthlySummary({
+    dailyLiters: 2,
+    pricePerLiterMad: 8,
+    discountPercent: 8,
+    daysPerMonth: 30,
+  });
+  // 60L * 8 MAD = 480 MAD gross, 8% discount = 38.4 MAD savings -> 441.6 MAD net
+  assert.equal(subSummary.monthlyLiters, 60);
+  assert.equal(subSummary.grossMonthlyMad, 480);
+  assert.equal(subSummary.monthlySavingsMad, 38.4);
+  assert.equal(subSummary.netMonthlyMad, 441.6);
+});
+
+test('calculateFarmFinancialAnalytics and generateSmartFarmAssistantAnswer compute cost per liter and profit', () => {
+  const financials = {
+    monthlyMilkLitersProduced: 6000,
+    monthlyMilkLitersSold: 5500,
+    milkSellingPricePerLiterMad: 8,
+    activeDairyCowsCount: 12,
+    monthlyFeedExpenseMad: 18000,
+    monthlyLaborAndVetExpenseMad: 7500,
+    monthlyUtilitiesAndWaterMad: 1500,
+    monthlyLivestockSalesRevenueMad: 45000,
+    monthlyLivestockCostMad: 28000,
+    monthlyCropsAndHoneyRevenueMad: 12000,
+    monthlyCropsCostMad: 4000,
+  };
+
+  const analytics = calculateFarmFinancialAnalytics(financials);
+  // Dairy operating cost = 18000 + 7500 + 1500 = 27000 MAD / 6000 L = 4.5 MAD/L
+  assert.equal(analytics.costPerLiterMilkMad, 4.5);
+  // Dairy revenue = 5500 * 8 = 44000 MAD, Dairy net profit = 44000 - 27000 = 17000 MAD
+  assert.equal(analytics.dairyMonthlyRevenueMad, 44000);
+  assert.equal(analytics.dairyNetProfitMad, 17000);
+  // Total monthly net profit = 17000 (dairy) + 17000 (livestock) + 8000 (crops) = 42000 MAD
+  assert.equal(analytics.totalMonthlyNetProfitMad, 42000);
+
+  const aiReportEn = generateSmartFarmAssistantAnswer({
+    question: 'How much milk did we sell this month, and what was our profit?',
+    language: 'en',
+    financials,
+    analytics,
+    livestockCount: 5,
+  });
+  assert.ok(aiReportEn.includes('5,500'));
+  assert.ok(aiReportEn.includes('4.5 MAD/litre'));
+  assert.ok(aiReportEn.includes('42,000 MAD'));
+});
+
+test('filterSeasonalCalendarItems filters farm products by season, month, and category', async () => {
+  const { INITIAL_SEASONAL_CALENDAR_ITEMS, filterSeasonalCalendarItems } =
+    await import('./farmLogic');
+
+  const allItems = filterSeasonalCalendarItems(INITIAL_SEASONAL_CALENDAR_ITEMS, {
+    season: 'all',
+    month: 'all',
+    category: 'all',
+  });
+  assert.equal(allItems.length, 8);
+
+  const novemberAutumnHarvest = filterSeasonalCalendarItems(
+    INITIAL_SEASONAL_CALENDAR_ITEMS,
+    {
+      season: 'autumn',
+      month: 11,
+      category: 'farm_goods',
+    }
+  );
+  assert.ok(
+    novemberAutumnHarvest.some((item) => item.id === 'cal-olive-oil-almonds')
+  );
+
+  const maySpringDairy = filterSeasonalCalendarItems(
+    INITIAL_SEASONAL_CALENDAR_ITEMS,
+    {
+      season: 'spring',
+      month: 5,
+      category: 'dairy',
+    }
+  );
+  assert.equal(maySpringDairy.length, 2);
+});
+
+
 
